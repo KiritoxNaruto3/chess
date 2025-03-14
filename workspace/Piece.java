@@ -1,4 +1,9 @@
 
+
+
+
+
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -42,7 +47,7 @@ public class Piece {
         int x = currentSquare.getX();
         int y = currentSquare.getY();
         
-        g.drawImage(this.img, x, y, null);
+        g.drawImage(img.getScaledInstance(50, 50, Image.SCALE_DEFAULT), x, y, null);
     }
     
     
@@ -50,8 +55,16 @@ public class Piece {
     //return a list of every square that is "controlled" by this piece. A square is controlled
     //if the piece capture into it legally.
     public ArrayList<Square> getControlledSquares(Square[][] board, Square start) {
-     return null;
-    }
+      ArrayList<Square> controlledSquares = new ArrayList<>();
+
+      if (start.getCol() + 1 < 8) {
+          controlledSquares.add(board[start.getRow()][start.getCol() + 1]);
+      }
+
+      return controlledSquares;
+  }
+
+    
     
 
     //TO BE IMPLEMENTED!
@@ -61,6 +74,40 @@ public class Piece {
     //please note that your piece must have some sort of logic. Just being able to move to every square on the board is not
     //going to score any points.
     public ArrayList<Square> getLegalMoves(Board b, Square start){
-    	return null;
+    	ArrayList<Square> moves = new ArrayList<>();
+
+        // Ensure moves stay within bounds and check for capture opportunities
+        if (start.getCol() + 1 < 8) {
+            moves.add(b.getSquareArray()[start.getRow()][start.getCol() + 1]);
+        }
+
+        int row = start.getRow();
+        int col = start.getCol();
+    
+     
+            // Move Right
+    if (col + 1 < 8 && b.getSquareArray()[row][col + 1].getOccupyingPiece() == null) {
+        moves.add(b.getSquareArray()[row][col + 1]);
     }
-}
+
+    // Move Left
+    if (col - 1 >= 0 && b.getSquareArray()[row][col - 1].getOccupyingPiece() == null) {
+        moves.add(b.getSquareArray()[row][col - 1]);
+    }
+
+    // Move Up
+    if (row - 1 >= 0 && b.getSquareArray()[row - 1][col].getOccupyingPiece() == null) {
+        moves.add(b.getSquareArray()[row - 1][col]);
+    }
+
+    // Move Down
+    if (row + 1 < 8 && b.getSquareArray()[row + 1][col].getOccupyingPiece() == null) {
+        moves.add(b.getSquareArray()[row + 1][col]);
+    }
+
+  
+        return moves;
+    }
+    
+       
+    }
